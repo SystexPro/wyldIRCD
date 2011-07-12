@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,26 +17,12 @@ import org.systexpro.jircd.misc.Misc;
 
 public class SQLHandler {
 
-	File NICKS = new File("./tmp/nicks.db");
-	File CHANNELS = new File("./tmp/channels.db");
-
-	public String read(String file) throws IOException {
-
-		FileInputStream fstream = new FileInputStream(NICKS);
-		DataInputStream in = new DataInputStream(fstream);
-		BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		String strLine;
-		while ((strLine = br.readLine()) != null)   {
-			System.out.println (strLine);
-		}
-		in.close();
-		return "";
-	}
-
+	public File nicks = new File("./tmp/nicks.db");
+	public File CHANNELS = new File("./tmp/channels.db");
 
 	public void write(String line, String file) throws IOException {
 		if(file.equalsIgnoreCase("nicks")) {
-			FileWriter fstream = new FileWriter("out.txt");
+			FileWriter fstream = new FileWriter(nicks);
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(line + "\n");
 			out.close();
@@ -47,6 +34,21 @@ public class SQLHandler {
 		} else {
 			Misc.println("Unknown File");
 		}
+	}
+
+	public void getNickIdent(String username) throws IOException {
+		String user = username.toLowerCase();
+		BufferedReader in = new BufferedReader(new FileReader(nicks));
+		String str = "";
+		while ((str = in.readLine()) != null) {
+			if(str.startsWith(user)) {
+				Misc.println("Found Username");
+			} else {
+				Misc.println("Username not found");
+			}
+		}
+		in.close();
+
 	}
 
 

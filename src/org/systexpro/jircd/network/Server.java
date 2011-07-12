@@ -1,40 +1,16 @@
+package org.systexpro.jircd.network;
 
-package org.systexpro.jircd.main;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.management.ManagementFactory;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Iterator;
-import java.util.Map;
+import java.net.*;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.systexpro.jircd.entity.UnknownEntity;
-import org.systexpro.jircd.filemanager.PropertiesFile;
-import org.systexpro.jircd.filemanager.TextHandler;
-import org.systexpro.jircd.handle.Command;
-import org.systexpro.jircd.handle.UserMode;
-import org.systexpro.jircd.handle.UserOper;
-import org.systexpro.jircd.handle.UserPM;
-import org.systexpro.jircd.handle.UserQuit;
-import org.systexpro.jircd.misc.ChatColor;
-import org.systexpro.jircd.misc.MOTD;
-import org.systexpro.jircd.misc.Misc;
-import org.systexpro.jircd.network.CheckHost;
-import org.systexpro.jircd.network.Network;
-import org.systexpro.jircd.pl.Channel;
-import org.systexpro.jircd.pl.Constants;
-import org.systexpro.jircd.pl.User;
-
+import org.systexpro.jircd.filemanager.*;
+import org.systexpro.jircd.handle.*;
+import org.systexpro.jircd.main.*;
+import org.systexpro.jircd.misc.*;
+import org.systexpro.jircd.pl.*;
 
 public class Server extends Thread {
 	public Socket socket;
@@ -44,11 +20,13 @@ public class Server extends Thread {
 	public DataOutputStream outToClient;
 	public boolean sendAllJson = false;
 	public String pid;
-	public IRCServer ircServer = new IRCServer().getHandler();
+	public wyldIRCD ircServer = new wyldIRCD().getHandler();
 	public int usersOnline = 0;
 	public Network network;
+	public SQLHandler sql = new SQLHandler();
+	public wyldConfig wyldConfig = new wyldConfig();
 
-	public Server(Socket connectionSocket, int ID, IRCServer instance) {
+	public Server(Socket connectionSocket, int ID, wyldIRCD instance) {
 		socket = connectionSocket;
 		ThreadID = ID;
 		RemoteIP = connectionSocket.getInetAddress().getHostAddress();
@@ -66,8 +44,8 @@ public class Server extends Thread {
 		}
 		sendText("*** Found your hostname");
 		sendText("*** No Ident response");
-		sendText("Welcome to the " + ircServer.getServerName() + " Network ");
-		sendText("Your host is " + ircServer.getServerHost() + ", running " + wyldIRCD.name + wyldIRCD.version);
+		sendText("Welcome to the " + wyldConfig.getServerName() + " Network ");
+		sendText("Your host is " + wyldConfig.getServerHost() + ", running " + wyldConfig.getServerName());
 		sendText("There are " + usersOnline + " users and __ invisible on __ servers");
 		sendText(oper.OpersOnline + ":operator(s) online");
 		sendText("___:channels formed");
@@ -93,9 +71,11 @@ public class Server extends Thread {
 				String[] userInfo = line.split(" ");
 				if(userInfo[0].startsWith("USER")) {
 					user = new User(userInfo[1], userInfo[2], userInfo[3], ThreadID, this);
-					this.ircServer.addUser(user, user.username);
+					this.ircServer.addUser(user, user.getUsername());
 					usersOnline += 1;
 					sendText("Logged in as " + user.getHostMask());
+					sql.write(user.getUsername() + ":" + user.getHostMask(), "nicks");
+					sql.getNickIdent(user.getUsername());
 				}
 				Misc.println("[Socket] Received: \"" + line + "\" in thread " + ThreadID + ".");
 			} catch (SocketException e) {
@@ -108,10 +88,8 @@ public class Server extends Thread {
 				closeSocket();
 				break;
 			}
-
 			new Command(line, this);
 		}
-
 		Misc.println("[Socket] User on " + RemoteIP + " disconnected. (Thread ID was " + ThreadID + ")");
 		try {
 			ircServer.clients.remove(this);
@@ -149,7 +127,7 @@ public class Server extends Thread {
 
 	protected void readMotd() {
 		//TextHandler th = new TextHandler(Constants.RPL_MOTDSTART);
-		sendText("- " + ircServer.getServerName() + " Message of the Day -");
+		sendText("- " + wyldConfig.getServerName() + " Message of the Day -");
 		//send(th);
 		for (int i = 0; i < motd.motd.length; i++) {
 			//th = new TextHandler(Constants.RPL_MOTD);

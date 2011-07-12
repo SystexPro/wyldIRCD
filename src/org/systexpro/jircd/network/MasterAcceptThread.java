@@ -5,28 +5,29 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import org.systexpro.jircd.main.Server;
-import org.systexpro.jircd.main.IRCServer;
+import org.systexpro.jircd.main.wyldConfig;
+import org.systexpro.jircd.main.wyldIRCD;
 import org.systexpro.jircd.misc.Messages;
 import org.systexpro.jircd.misc.Misc;
 
 public class MasterAcceptThread extends Thread {
 	
-	private IRCServer irc;
+	private wyldIRCD irc;
 	public int i = 0;
+	public wyldConfig wyldConfig = new wyldConfig();
 	
-	public MasterAcceptThread(IRCServer instance) {
+	public MasterAcceptThread(wyldIRCD instance) {
 		irc = instance;
 	}
 
 	public void run(){
 		ServerSocket mainSocket = null;
 		try {
-			mainSocket = new ServerSocket(irc.getPort());
+			mainSocket = new ServerSocket(wyldConfig.getPort());
 		} catch (IOException e) {
 			Misc.println(Messages.PORT_IN_USE.getDesc());
 		}
-		Misc.println("[Socket] Listening on port " + irc.getPort() + " for incoming connections.");
+		Misc.println("[Socket] Listening on port " + wyldConfig.getPort() + " for incoming connections.");
 		while(true){
 			Socket connectionSocket = null;
 			try {

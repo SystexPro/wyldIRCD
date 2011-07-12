@@ -2,7 +2,7 @@ package org.systexpro.jircd.network;
 
 import java.net.Socket;
 
-import org.systexpro.jircd.main.Server;
+
 
 public class CheckHost {
 

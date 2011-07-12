@@ -6,8 +6,8 @@ __      ___   _| | __| | | | | |__) | |    | |  | |
   \_/\_/  \__, |_|\__,_|_____|_|  \_\\_____|_____/ 
            __/ |                                   
           |___/
-Hello and Welcome to my Java IRCD Server
-2d
-- s
+2Hello and Welcome to my Java IRCD Server
+2Enjoy :D
+
 ==Devs==
 Christian Horton - christian@tweakuniverse.com

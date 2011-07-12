@@ -1,12 +1,14 @@
 package org.systexpro.jircd.handle;
 
 import org.systexpro.jircd.filemanager.TextHandler;
-import org.systexpro.jircd.main.Server;
+import org.systexpro.jircd.main.wyldConfig;
+import org.systexpro.jircd.network.Server;
 
 public class UserOper implements CommandHandler {
 
 	public Server client;
-
+	public wyldConfig wyldConfig = new wyldConfig();
+	
 	public UserOper(Server c) {
 		client = c;
 	}
@@ -28,7 +30,7 @@ public class UserOper implements CommandHandler {
 		if(isOper) {
 			String type = typed.toLowerCase();
 			TextHandler msg = new TextHandler("SNOTICE");
-			msg.appendParameter(client.ircServer.getServerHost() + " " + (String) client.ircServer.getDate());
+			msg.appendParameter(wyldConfig.getServerHost() + " " + (String) client.ircServer.getDate());
 			if(type.equalsIgnoreCase("client")) {
 				msg.appendLastParameter("-- Client exiting: " + s);
 			} else if(type.equalsIgnoreCase("join")) {

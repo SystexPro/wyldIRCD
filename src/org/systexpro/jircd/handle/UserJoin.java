@@ -3,7 +3,7 @@ package org.systexpro.jircd.handle;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.systexpro.jircd.main.Server;
+import org.systexpro.jircd.network.Server;
 
 public class UserJoin implements CommandHandler {
 	

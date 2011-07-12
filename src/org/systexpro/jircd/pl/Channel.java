@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.systexpro.jircd.filemanager.TextHandler;
-import org.systexpro.jircd.main.Server;
 import org.systexpro.jircd.misc.Misc;
+import org.systexpro.jircd.network.Server;
 
 public class Channel {
 	

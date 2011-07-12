@@ -1,6 +1,6 @@
 package org.systexpro.jircd.handle;
 
-import org.systexpro.jircd.main.Server;
+import org.systexpro.jircd.network.Server;
 
 public interface CommandHandler {
 	

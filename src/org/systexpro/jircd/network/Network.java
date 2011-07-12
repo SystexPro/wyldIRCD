@@ -1,8 +1,9 @@
 package org.systexpro.jircd.network;
 
+import java.io.IOException;
 import java.net.Socket;
 
-import org.systexpro.jircd.main.Server;
+
 
 public class Network {
 
@@ -15,7 +16,15 @@ public class Network {
 	}
 	
 	public void stopNetwork() {
-		
+		System.exit(0);
+	}
+	
+	public void closeSocket() {
+		try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 } 

@@ -4,8 +4,9 @@ import java.math.BigInteger;
 
 import org.systexpro.jircd.entity.RegisteredEntity;
 import org.systexpro.jircd.filemanager.TextHandler;
-import org.systexpro.jircd.main.Server;
+import org.systexpro.jircd.main.wyldConfig;
 import org.systexpro.jircd.misc.Misc;
+import org.systexpro.jircd.network.Server;
 import org.systexpro.jircd.services.ServicesBot;
 
 public class User {
@@ -19,6 +20,8 @@ public class User {
 	public String userhost;
 	public String userrealname;
 	public String fullHostMask;
+	public String quitMessage;
+	public wyldConfig wyldConfig = new wyldConfig();
 	
 	/**
 	 * Construct a new User
@@ -32,7 +35,7 @@ public class User {
 		userhost = hostname;
 		clientId = id;
 		server = serve;
-		fullHostMask = userident + "@" + this.server.ircServer.getHostCover() + "-" + maskHost(this.userhost);
+		fullHostMask = userident + "@" +  wyldConfig.getHostCover() + "-" + maskHost(this.userhost);
 		
 	}
 
@@ -57,6 +60,14 @@ public class User {
 		return this;
 	}
 	
+	public String getQuitMessage() {
+		return quitMessage;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
 	public String ranString(int id)
 	{
 		return new BigInteger(id , Misc.RANDOM).toString(32).toUpperCase().trim();
@@ -79,9 +90,10 @@ public class User {
 			ip3 = new String(ranString(25));
 			ip4 = new String(ranString(21));
 		}
-		return ip1 + "." + ip2 + "." + ip3 + "." + ip4;
+		return ip1 + "." + ip2 + "." + ip3 + "." + ip4 + "";
 	}
 
+	
 	public void send(TextHandler message) {
 		this.server.send(message);
 

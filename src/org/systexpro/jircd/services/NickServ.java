@@ -1,9 +1,9 @@
 package org.systexpro.jircd.services;
 
-import org.systexpro.jircd.main.IRCServer;
+import org.systexpro.jircd.main.wyldIRCD;
 import org.systexpro.jircd.pl.*;
 
-public class NickServ extends IRCServer implements ServicesBot {
+public class NickServ extends wyldIRCD implements ServicesBot {
 	
 	public NickServ(String name, boolean isOper) {
 		username = name;

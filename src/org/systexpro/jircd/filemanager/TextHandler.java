@@ -1,7 +1,7 @@
 package org.systexpro.jircd.filemanager;
 
-import org.systexpro.jircd.main.Server;
-import org.systexpro.jircd.misc.wyldSettings;
+import org.systexpro.jircd.main.wyldSettings;
+import org.systexpro.jircd.network.Server;
 import org.systexpro.jircd.pl.Channel;
 import org.systexpro.jircd.pl.User;
 
